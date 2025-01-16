@@ -19,21 +19,23 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance 
+# User Data Streams for Binance Spot TESTNET
 
-**Last Updated: 2024-12-17**
+**Last Updated: 2024-11-27**
 
-* The base API endpoint is: **https://api.binance.com**
+# General WSS information
+
+* The base API endpoint is: **https://testnet.binance.vision/**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
 * Doing a `PUT` on an active `listenKey` will extend its validity for 60 minutes.
 * Doing a `DELETE` on an active `listenKey` will close the stream and invalidate the `listenKey`.
 * Doing a `POST` on an account with an active `listenKey` will return the currently active `listenKey` and extend its validity for 60 minutes.
-* The base websocket endpoint is: **wss://stream.binance.com:9443**
+* The base websocket endpoint is: **wss://stream.testnet.binance.vision:9443**
 * User Data Streams are accessed at **/ws/\<listenKey\>** or **/stream?streams=\<listenKey\>**
-* A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
-* All time and timestamp related fields in the JSON responses are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.  
+* A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark.
+* All time and timestamp related fields in the JSON responses are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.
   * For example `/ws/<listenKey>?timeUnit=MICROSECOND`
-    
+
 ## API Endpoints
 ### Create a listenKey (USER_STREAM)
 ```
@@ -133,8 +135,6 @@ Balance Update occurs during the following:
 
 ### Order Update
 Orders are updated with the `executionReport` event.
-
-We recommend using the [FIX API](fix-api.md) for better performance compared to using the User Data Streams.
 
 **Payload:**
 ```javascript
@@ -322,17 +322,17 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 }
 ```
 
-**Execution types:**
+#### Execution types
 
 * `NEW` - The order has been accepted into the engine.
 * `CANCELED` - The order has been canceled by the user.
 * `REPLACED` (currently unused)
-* `REJECTED` - The order has been rejected and was not processed (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
+* `REJECTED` - The order has been rejected and was not processed. (e.g. Cancel Replace orders where the new order placement was rejected even if the cancel request succeeded.)
 * `TRADE` - Part of the order or all of the order's quantity has filled.
 * `EXPIRED` - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
 * `TRADE_PREVENTION` - The order has expired due to STP.
 
-Check the [Enums page](./enums.md) for more relevant enum definitions.
+Check the [Rest API Documentation](./rest-api.md#enum-definitions) for more relevant enum definitions.
 
 ### Listen Key Expired 
 
@@ -347,12 +347,12 @@ This event will not be pushed when the stream is closed normally.
 ```javascript
 {
   "e": "listenKeyExpired",  // Event type
-  "E": 1699596037418,      // Event time
+  "E": "1699596037418",     // Event time
   "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
 }
 ```
 
-## Event Stream Terminated
+### Event Stream Terminated
 
 This event appears only for WebSocket API. 
 
@@ -369,7 +369,7 @@ This event appears only for WebSocket API.
 }
 ```
 
-## External Lock Update
+### External Lock Update
 
 `externalLockUpdate` is sent when part of your spot wallet balance is locked/unlocked by an external system, for example when used as margin collateral.
 
@@ -382,7 +382,4 @@ This event appears only for WebSocket API.
   "a": "NEO",                 // Asset
   "d": "10.00000000",         // Delta
   "T": 1581557507268          // Transaction Time
-}
-```
-
-
+}```
