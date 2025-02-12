@@ -2,7 +2,7 @@
 
 **声明:** 此术语表只适用现货交易(`SPOT`); 用于合约、期权或者其他币安API相应的术语可能有不一样的表达。
 
-## A
+### A
 
 `ACK`
 * `newOrderRespType`的枚举值, 设置时下单的返回值只包括下面的字段: `symbol`, `orderId`, `orderListId`, `clientOrderId`, 和 `transactTime`。
@@ -17,7 +17,7 @@ allocation
 * 此字段是一个唯一识别码，用来标识针对某个交易对上进行的分配(allocation)。
 
 `allocationType`
-* 参考 [ 分配类型 ](../rest-api_CN.md#allocationtype) 
+* 参考 [ 分配类型 ](../enums_CN.md#allocationtype) 
 
 `askPrice`
 * `ticker` 请求返回的来自“卖"方的最低价格。
@@ -33,7 +33,7 @@ allocation
 
 ---
 
-## B
+### B
 
 `baseAsset`
 * 基准资产; 指代交易对中的第一个资产(比如 `BTCUSDT`中的`BTC`), 表示被出售或者买进的资产。
@@ -61,7 +61,7 @@ allocation
 
 ---
 
-## C
+### C
 
 `CANCELED`
 * 订单的一个状态, 用来表示订单被用户取消。
@@ -83,14 +83,14 @@ allocation
 
 ---
 
-## D
+### D
 
 Data Source
 * 发送请求后得到数据的地方, 比如数据库, 缓存等。
 
 ---
 
-## E
+### E
 
 `executedQty`
 * 订单中成交的数量。
@@ -103,7 +103,7 @@ Data Source
 
 ---
 
-## F
+### F
 
 `filters`
 * 过滤器; 用于定义交易规则。
@@ -119,21 +119,21 @@ Data Source
 
 ---
 
-## G
+### G
 
 `GTC`/ Good Til Canceled
 * `timeInForce` 的枚举值, 表示订单会一直有效, 直到全部成交或者被取消。
 
 ---
 
-## H
+### H
 
 `HALT`
 * 交易对的一个交易状态, 可以用来表示交易处于紧急暂停状态。 此时市场信息还会生成。
 
 ---
 
-## I
+### I
 
 `intervalNum`
 * 表示间隔时间, 例如如果`interval`的值是`SECOND`, 并且`intervalNum`是5, 那么表示为每5秒钟间隔。
@@ -152,14 +152,14 @@ Data Source
 
 ---
 
-## K
+### K
 
 `kline`
 * K线; 包括了一定时期内的开盘价, 收盘价, 最高价，最低价，交易量，以及其他的市场数据。 通常也被成为蜡烛图。
 
 ---
 
-## L
+### L
 
 Last Prevented Quantity
 * 最后被阻止交易的数量。这仅在订单因 STP 触发而过期时可见。
@@ -190,7 +190,7 @@ Last Prevented Quantity
 
 ---
 
-## M
+### M
 
 `MARKET`
 * 一个订单的类型; 其订单会在系统中尽可能的全部成交，除非市场没有流动性，无法成交部分会被交易取消。
@@ -204,7 +204,7 @@ Memory
 
 ---
 
-## N
+### N
 
 `NEW`
 * 一个订单的状态, 表示订单成功被发送到了交易引擎。
@@ -217,13 +217,18 @@ Notional value
 
 ---
 
-## O
+### O
 
 `OCO`
-* 二选一订单(`One-Cancels-the-Other`); 订单支持用户同时提交一些列订单, 比如现价单(`LIMIT_MAKER`)和止盈止损订单(`STOP_LOSS` or `STOP_LOSS_LIMIT`)。 当执行其中一个订单时，另一个订单将自动取消。
+
+* 二选一订单(`One-Cancels-the-Other`)； 订单支持用户同时提交一系列订单, 比如现价单(`LIMIT_MAKER`)和止盈止损订单(`STOP_LOSS` or `STOP_LOSS_LIMIT`)。 当执行其中一个订单时，另一个订单将自动取消。
 
 Order Book
 * 订单薄; 包括了当前市场上买卖挂单。
+
+
+Order List
+* 订单列表；将多个订单组合为一个单元。 请参考 `OCO` 与/或 `OTO`
 
 `orderId`
 * 订单数据里用来唯一标识的ID。
@@ -234,12 +239,28 @@ Order Book
 `origClientOrderId`
 * 在查询或者取消订单请求中, 用户设置在 `clientOrderId` 的值。
 
+`OTO`
+* 一个订单触发另一个订单(`One-Triggers-the-Other`)； 这个订单列表含有一个生效订单和一个待处理订单。
+* 当生效订单完全成交时，待处理订单才会被自动下单。
+
+`OTOCO`
+* 由一个订单触发另一个二选一订单(`One-Triggers-a-One-Cancels-the-Other`)； 这个订单列表含有一个生效订单和一个待处理的 OCO 订单。
+* 当生效订单完全成交时，待处理订单才会被自动下单。
+
 ---
 
-## P
+### P
 
 `PARTIALLY_FILLED`
 * 订单的一种状态, 表示订单被部分成交。
+
+Pending order
+* 订单列表中的订单，仅在相应的生效订单完全成交时才会被放在订单簿上。
+* 每个订单列表可以包含一个待处理订单，也可以包含2个可组成 `OCO` 的待处理订单。
+* 在单一订单的情况下，几乎支持任何订单类型，但不包括使用 `quoteOrderQty` 的 `MARKET` 的订单。
+
+`PENDING_NEW`
+* 订单 `status`； 表示引擎已接受订单列表的待处理订单，但是待处理订单并没有被放到订单簿上。
 
 `preventedQuantity`
 * 因为 STP 导致订单失效的数量。
@@ -249,7 +270,7 @@ Order Book
 
 ---
 
-## Q
+### Q
 
 `quantity`
 * 订单量; 买卖订单时候基本资产(`base asset`)的数量。
@@ -271,7 +292,7 @@ Order Book
 
 ---
 
-## R
+### R
 
 `recvWindow`
 * API中的一个参数, 值为毫秒; 用以设定请求从`timestamp`开始的有效期。
@@ -284,7 +305,7 @@ Reverse `MARKET` order
 
 ---
 
-## S
+### S
 
 Self Trade Prevention (STP)
 * 自我交易预防; 此功能能阻止订单与来自同一账户或者同一 `tradeGroupId` 下的账户的订单撮合交易。
@@ -296,7 +317,7 @@ Self Trade Prevention (STP)
 * 方向(`side`)的一个枚举值, 用于用户希望卖出某一资产。
 
 Smart Order Routing (SOR)
-* 智能订单路由; 使用可互换的定价资产(`quote asset`)来提高流动性. [请阅读 SOR 常见问题](./sor_faq_cn.md) 来了解更多详情。
+* 智能订单路由; 使用可互换的定价资产(`quote asset`)来提高流动性. [请阅读 SOR 常见问题](./sor_faq_CN.md) 来了解更多详情。
 
 `SPOT`
 * 现货交易; 此种交易时候，买卖相应的资产会立刻到账。
@@ -325,7 +346,7 @@ Smart Order Routing (SOR)
 
 ---
 
-## T
+### T
 
 `TAKE_PROFIT`
 * 止盈订单; 当市场价格触及`stopPrice`价, 此订单会以市价单(`MARKET`)被执行。
@@ -357,24 +378,24 @@ Smart Order Routing (SOR)
 * 追踪单被激活和跟踪价格变化的时间。
 
 `transactTime`
-* 订单的更新时间： 下单， 成交或者取消。此字段（和所有时间戳有关的字段一样）的单位为毫秒++
+* 订单的更新时间：下单， 成交或者取消。默认情况下，此字段（以及所有与时间戳相关的字段）在 JSON 响应中单位是毫秒。
 
 ---
 
-## U
+### U
 
 `uiKlines`
 * 为了前端展示而优化的K线。
 
 `updateTime`
-* 订单的最后更新时间, 单位为毫秒。
+* 订单的上次更新时间。默认情况下，此字段（以及所有与时间戳相关的字段）在 JSON 响应中单位是毫秒。
 
 User Data Stream
 * 通过WebSocket推送及时的个人用户信息, 包括了账户余额的变动, 订单的更新等。
 
 ---
 
-## W
+### W
 
 `weightedAveragePrice`
 * 成交量加权平均价; 将过去N分钟内所有交易的价格按各自的成交量加权而算出的平均价。
@@ -382,11 +403,15 @@ User Data Stream
 `workingFloor`
 * 工作平台； 该字段用于定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。
 
+Working order
+* 订单列表中的订单，该订单会立即放置在订单簿上。当此订单完全成交时，一个或多个待处理订单的自动下单会被触发。
+* 一个隶属于订单列表的订单，只能是单个 `LIMIT` 或 `LIMIT_MAKER` 类型的订单。
+
 `workingTime`
 * 指示订单何时添加到了 order book。
 ---
 
-## X
+### X
 
 `X-MBX-ORDER-COUNT-XX`
 * 请求的返回Header里面一个自定义值, 用来表明当前用户下单限制额的所剩额度。
